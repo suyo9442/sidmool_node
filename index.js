@@ -2,6 +2,9 @@
 const express = require('express');
 const app = express();
 
+/* body-parser */
+app.use(express.urlencoded({ extended: true }))
+
 // (포트번호, 실행함수)
 // url: localhost:8080
 app.listen(8080, function () {
@@ -27,3 +30,9 @@ app.get('/profile', function (요청, 응답) {
 app.get('/', function (요청, 응답) {
     응답.sendFile(__dirname + '/index.html');
 });
+
+// form태그 POST 요청
+app.post('/add', function (요청, 응답) {
+    console.log(요청.body);
+    응답.send('전송완료');
+})
