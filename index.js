@@ -33,9 +33,16 @@ app.get('/main', function (요청, 응답) {
     응답.send('mainddd');
 });
 
-app.get('/profile', function (요청, 응답) {
-    응답.send('profileddd');
-});
+
+// detail 페이지
+app.get('/detail/:id', function (요청, 응답) {
+
+    db.collection('post').findOne({ _id: parseInt(요청.params.id) }, function (에러, 결과) {
+        console.log(결과)
+        console.log('되?')
+        응답.render('detail.ejs', { detail: 결과 })
+    })
+})
 
 
 // '/' 하나쓰면 홈
@@ -64,7 +71,7 @@ app.post('/add', function (요청, 응답) {
 // mongoDB에서 데이터 꺼내와 list.ejs에 꽂기
 app.get('/list', function (요청, 응답) {
     db.collection('post').find().toArray(function (에러, 결과) {
-        console.log(결과);
+        // console.log(결과);
         응답.render('list.ejs', { posts: 결과 })
     })
 })
@@ -80,10 +87,10 @@ app.delete('/delete', function (요청, 응답) {
     db.collection('post').deleteOne(요청.body, function (에러, 결과) {
         console.log('삭제완료차차')
 
+        // 삭제할 때 총게시물갯수 -1
         db.collection('counter').updateOne({ name: '게시물갯수' }, { $inc: { totalPost: -1 } }, function (에러, 결과) {
             if (에러) { return console.log(에러) }
         })
+        응답.send('삭제완료차차');
     })
-
-    응답.send('삭제완료차차');
 })
