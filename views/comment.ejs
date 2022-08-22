@@ -1,0 +1,79 @@
+<!doctype html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../public/comment.css">
+
+    <title>댓글창</title>
+</head>
+
+<body>
+    <div class="wrap">
+        <%- include('nav.html') %>
+    
+        <div class="list-group">
+            <% for(var i = 0; i < comments.length; i++){ %>
+            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                <p class="nickname">
+                    <%= comments[i].작성자 %>
+                </p>
+                <div class="d-flex w-100 justify-content-between">
+                <p class="content">
+                    <%= comments[i].내용 %>
+                </p>
+                <button type="button" class="comDelete mb-3" data-id="<%= comments[i]._id %>">X</button>
+              </div>
+            </a>
+            <% } %>
+        </div>
+    
+        <div class="card mb-2">
+            <div class="card-header bg-light">
+                REPLY
+                (<span class="comCount"><%= comments.length %></span>)
+            </div>
+    
+            <form action="/comPost" method="POST">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="form-inline mb-2">
+                            <label for="replyId">
+                                <i class="fa fa-user-circle-o fa-2x"></i>
+                            </label>
+                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId" name="nickname">
+                        </div>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="content"></textarea>
+                        <button type="submit" class="btn btn-dark mt-3">post reply</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script>
+        $('.comDelete').click(function(e){
+            var btnId = e.target.dataset.id;
+            var target = $(this);
+
+            $.ajax({
+                method: 'DELETE',
+                url: '/comDelete',
+                data: {_id: btnId}
+            }).done((결과)=>{
+                target.offsetParent('a').fadeOut();
+            }).fail((실패)=>{
+
+            })
+        })
+    </script>
+</body>
+
+</html>

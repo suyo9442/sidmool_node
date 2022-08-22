@@ -20,7 +20,8 @@
         <h4> 글번호 : <%= posts[i]._id %> </h4>
         <h4> 할일 제목 : <%= posts[i].제목 %> </h4>
         <p> 할일 마감날짜 : <%= posts[i].날짜 %> </p>
-        <button class="delete" data-id="<%= posts[i]._id %>">삭제</button>
+        <button class="delete btn btn-danger" data-id="<%= posts[i]._id %>">삭제</button>
+        <button class="edit btn btn-primary" data-id="<%= posts[i]._id %>">수정</button>
       </li>
       <% } %>
     </ul>
@@ -46,6 +47,20 @@
           alert(실패)
 
         })
+      })
+
+      
+      $('.edit').click(function(e){
+          var 글번호 = e.target.dataset.id;
+          // console.log(글번호)
+
+          $.ajax({
+            method: 'GET',
+          }).done(()=>{
+            location.href=`/edit/${글번호}`;
+          }).fail((err)=>{
+            console.log(err)
+          })
       })
     </script>
 </body>

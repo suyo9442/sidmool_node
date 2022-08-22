@@ -1,0 +1,31 @@
+.wrap {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.card {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+}
+.comDelete {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 11px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    background: none;
+}
+.comDelete:hover {
+    color: #fff;
+    background: #000;
+}
+.content {
+    width: 80%;
+}
+.nickname {
+    width: 10%;
+    font-size: 13px;
+    font-weight: 600;
+}
