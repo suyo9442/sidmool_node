@@ -46,7 +46,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// detail 페이지
+
+/////////////// 상세페이지
 app.get('/detail/:id', function (요청, 응답) {
 
     db.collection('post').findOne({ _id: parseInt(요청.params.id) }, function (에러, 결과) {
@@ -150,6 +151,8 @@ app.delete('/comDelete', function (요청, 응답) {
 
 
 
+
+/////////////// 로그인
 // signup 페이지
 app.get('/signup', (req, res) => {
     res.render('signup.ejs')
@@ -185,7 +188,6 @@ function 로그인했니(req, res, next) {
         res.send('로그인안하셨씁니다')
     }
 }
-
 // 로그인 인증방식
 pw.use(new LocalStrategy({
     usernameField: 'id',
@@ -215,4 +217,37 @@ passport.deserializeUser(function (아이디, done) {
     db.collection('login').findOne({ id: 아이디 }, (err, out) => {
         done(null, out)
     })
-}); 
+});
+
+
+
+/////////////// 검색기능
+app.get('/search', (req, res) => {
+    // console.log(req.query.value)
+    // db.collection('post')
+    //     .find({ $text: { $search: req.query.value } })
+    //     .toArray((err, out) => {
+    //         res.render('search.ejs', { posts: out })
+    //     })
+
+    // 인덱스 검색조건
+    var 검색조건 = [
+        {
+            $search: {
+                index: 'titleSearch',
+                text: {
+                    query: req.query.value,
+                    path: '제목'  // 제목날짜 둘다 찾고 싶으면 ['제목', '날짜']
+                }
+            }
+        },
+        { $sort: { _id: -1 } }
+    ]
+
+    db.collection('post')
+        .aggregate(검색조건)
+        .toArray((err, out) => {
+            res.render('search.ejs', { posts: out })
+        })
+})
+
