@@ -8,16 +8,35 @@
     bottom: 0;
     left: 0;
 }
-.comDelete {
+.list-group-item {
+    position: relative;
+}
+.editForm {
+    position: absolute;
+}
+.inputEdit {
+    width: 240%;
+}
+.btn_wrap {
+    width: 15%;
+}
+.comBtn {
+    float: right;
     width: 24px;
     height: 24px;
     font-size: 14px;
-    line-height: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid #ddd;
     border-radius: 50%;
     background: none;
 }
-.comDelete:hover {
+.comBtn svg {
+    width: 14px;
+    height: 14px;
+}
+.comBtn:hover {
     color: #fff;
     background: #000;
 }
@@ -28,4 +47,7 @@
     width: 10%;
     font-size: 13px;
     font-weight: 600;
+}
+.none {
+    display: none;
 }

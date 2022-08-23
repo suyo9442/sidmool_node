@@ -11,17 +11,20 @@ app.use(express.urlencoded({ extended: true }))
 /* ejs */
 app.set('view engine', 'ejs');
 
+/* env */
+require('dotenv').config()
+
 /* mongoDB */
 const MongoClient = require('mongodb').MongoClient;
 var db;
-MongoClient.connect('mongodb+srv://test:581583@cluster0.jhxqo.mongodb.net/test?retryWrites=true&w=majority', { useUnifiedTopology: true }, function (에러, client) {
+MongoClient.connect(process.env.DB_URL, { useUnifiedTopology: true }, function (에러, client) {
     if (에러) return console.log(에러);
 
     db = client.db('test');
 
     // listen(포트번호, 실행함수)
     // url: localhost:8080
-    app.listen(8080, function () {
+    app.listen(process.env.PORT, function () {
         console.log('listening on 8080');
     });
 })
@@ -36,6 +39,7 @@ app.use(methodOverride('_method'))
 const pw = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
+const { render } = require('ejs');
 
 app.use(session({ secret: '비밀코드', resave: true, saveUninitialized: false }));
 app.use(passport.initialize());
@@ -145,6 +149,19 @@ app.delete('/comDelete', function (요청, 응답) {
 })
 
 
+
+// signup 페이지
+app.get('/signup', (req, res) => {
+    res.render('signup.ejs')
+})
+app.post('/account', (req, res) => {
+    db.collection('login').insertOne({ id: req.body.addId, pw: req.body.addPw }, function (err, out) {
+        if (err) { console.log('실패!!') }
+
+        res.redirect('/login')
+    })
+})
+
 // login 페이지
 app.get('/login', (req, res) => {
     res.render('login.ejs')
@@ -188,7 +205,6 @@ pw.use(new LocalStrategy({
         }
     })
 }));
-
 // 세션에 저장
 passport.serializeUser(function (user, done) {
     done(null, user.id)
